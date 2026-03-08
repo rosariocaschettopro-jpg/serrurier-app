@@ -386,10 +386,18 @@ async function syncData(){
       const parsed=rows.slice(1).map(r=>{
         const date=parseGDate(r.c[0]?.v);
         if(!date) return null;
-        const ht=getNum(r.c[2]);
-        const tva=Math.round(ht*.1*100)/100;
-        const ttc=Math.round((ht+tva)*100)/100;
-        return{date,client:r.c[1]?.v||'Client',ht,tva,ttc,aco:getNum(r.c[5]),enc:getNum(r.c[7])};
+        const ht=getNum(r.c[2]);       // C = Tarifs HT
+        const tva=getNum(r.c[3]);      // D = TVA 10%
+        // colonne E = "10%" (texte), on la saute
+        const ttc=getNum(r.c[5]);      // F = Tarif TTC
+        const aco=getNum(r.c[6]);      // G = Acompte
+        const encAco=getNum(r.c[7]);   // H = Encaissement acompte
+        const enc=getNum(r.c[8]);      // I = Encaissement total
+        if(!ht && !ttc) return null;
+        const htCalc=ht||Math.round(ttc/1.1*100)/100;
+        const tvaCalc=tva||Math.round(htCalc*.1*100)/100;
+        const ttcCalc=ttc||Math.round((htCalc+tvaCalc)*100)/100;
+        return{date,client:r.c[1]?.v||'Client',ht:htCalc,tva:tvaCalc,ttc:ttcCalc,aco,encAco,enc};
       }).filter(Boolean);
       if(parsed.length===0) continue;
       interventions=parsed;
