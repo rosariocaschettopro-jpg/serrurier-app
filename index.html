@@ -309,15 +309,17 @@ function renderInt(){
   if(q)list=list.filter(i=>i.client.toLowerCase().includes(q));
   if(sort==='date')list.sort((a,b)=>new Date(b.date)-new Date(a.date));
   if(sort==='ttc')list.sort((a,b)=>b.ttc-a.ttc);
-  if(sort==='enc')list=list.filter(i=>i.enc>=i.ttc).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  if(sort==='pend')list=list.filter(i=>i.enc<i.ttc).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(sort==='enc')list=list.filter(i=>Math.round(i.enc*100)/100>=Math.round(i.ttc*100)/100-0.02&&i.enc>0).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(sort==='pend')list=list.filter(i=>Math.round(i.enc*100)/100<Math.round(i.ttc*100)/100-0.02||i.enc===0).sort((a,b)=>new Date(b.date)-new Date(a.date));
 
   document.getElementById('iList').innerHTML=list.map(i=>{
     const ini=i.client.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    const ok=i.enc>=i.ttc,pt=i.enc>0&&i.enc<i.ttc;
+    const enc=Math.round(i.enc*100)/100;
+    const ttc=Math.round(i.ttc*100)/100;
+    const ok=enc>0&&enc>=ttc-0.02, pt=enc>0&&enc<ttc-0.02;
     const cls=ok?'ok':pt?'pt':'no';
-    const lbl=ok?'✅ Soldé':pt?`⏳ ${f(i.enc)}`:'❌ Non enc.';
-    return`<div class="ii"><div class="av">${ini}</div><div class="ii-info"><div class="ii-cl">${i.client}</div><div class="ii-dt">${fD(i.date)}</div></div><div class="ii-r"><div class="ii-ttc">${f(i.ttc)}</div><div class="ii-enc ${cls}">${lbl}</div></div></div>`;
+    const lbl=ok?'✅ Soldé':pt?`⏳ ${f(enc)}`:'❌ Non enc.';
+    return`<div class="ii"><div class="av">${ini}</div><div class="ii-info"><div class="ii-cl">${i.client}</div><div class="ii-dt">${fD(i.date)}</div></div><div class="ii-r"><div class="ii-ttc">${f(ttc)}</div><div class="ii-enc ${cls}">${lbl}</div></div></div>`;
   }).join('')||'<div style="text-align:center;padding:36px 0;color:#CBD5E1;font-size:14px">Aucune intervention ce mois</div>';
 }
 
