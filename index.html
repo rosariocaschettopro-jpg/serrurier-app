@@ -247,7 +247,7 @@ body{background:var(--g1);color:var(--g8);max-width:430px;margin:0 auto;min-heig
 <div class="sc" id="sc-int">
   <div class="sb">
     <span style="color:#CBD5E1;font-size:16px">🔍</span>
-    <input type="text" id="q" placeholder="Rechercher un client…" oninput="renderInt()">
+    <input type="text" id="q" placeholder="Rechercher un client..." oninput="renderInt()">
   </div>
   <div class="chips">
     <div class="chip on" onclick="setSort('date',this)">📅 Date</div>
@@ -296,7 +296,7 @@ body{background:var(--g1);color:var(--g8);max-width:430px;margin:0 auto;min-heig
     <div class="mt">🔗 Connecter Google Sheet</div>
     <div class="fg">
       <label class="fl">URL ou ID de votre Google Sheet</label>
-      <input type="text" class="fi" id="sidField" placeholder="https://docs.google.com/spreadsheets/d/…">
+      <input type="text" class="fi" id="sidField" placeholder="https://docs.google.com/spreadsheets/d/...">
     </div>
     <div style="font-size:11px;color:var(--g4);margin-bottom:16px;line-height:1.7;background:#F8FAFC;border-radius:10px;padding:10px 12px">
       ⚠️ Le Sheet doit être <b style="color:var(--g8)">public en lecture</b><br>
@@ -353,8 +353,8 @@ function updNav(){
   const lbl=d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
   document.getElementById('mlbl').textContent=lbl.charAt(0).toUpperCase()+lbl.slice(1);
   const sub=document.getElementById('msub');
-  if(off===0){sub.textContent='mois actuel — tap pour revenir';sub.className='mlbl-sub cur';}
-  else{sub.textContent=off<0?`il y a ${Math.abs(off)} mois · tap pour aujourd'hui`:`dans ${off} mois`;sub.className='mlbl-sub';}
+  if(off===0){sub.textContent="mois actuel - tap pour revenir";sub.className='mlbl-sub cur';}
+  else{sub.textContent=off<0?`il y a ${Math.abs(off)} mois - tap pour aujourd'hui`:`dans ${off} mois`;sub.className='mlbl-sub';}
   document.getElementById('next').disabled=off>=0;
 }
 function nav(d){if(off+d>0)return;off+=d;updNav();refresh();}
